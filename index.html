@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f0f0f0;
+    }
+
+    .clock {
+      width: min(90vw, 90vh);
+      height: min(90vw, 90vh);
+      border: calc(min(90vw, 90vh) * 0.033) solid #333;
+      border-radius: 50%;
+      position: relative;
+      background: #fff;
+    }
+
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: calc(min(90vw, 90vh) * 0.033);
+      height: calc(min(90vw, 90vh) * 0.033);
+      background: #333;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .hour-marks {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hour-marks div {
+      width: calc(min(90vw, 90vh) * 0.007);
+      height: calc(min(90vw, 90vh) * 0.04);
+      background: #333;
+      position: absolute;
+      left: 50%;
+      margin-left: calc(min(90vw, 90vh) * -0.0035);
+      transform-origin: 50% calc(min(90vw, 90vh) * 0.5);
+    }
+
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom;
+      background: #333;
+      border-radius: calc(min(90vw, 90vh) * 0.013);
+    }
+
+    .hour {
+      width: calc(min(90vw, 90vh) * 0.013);
+      height: 25%;
+      margin-left: calc(min(90vw, 90vh) * -0.0065);
+    }
+
+    .minute {
+      width: calc(min(90vw, 90vh) * 0.01);
+      height: 35%;
+      margin-left: calc(min(90vw, 90vh) * -0.005);
+    }
+
+    .second {
+      width: calc(min(90vw, 90vh) * 0.007);
+      height: 40%;
+      margin-left: calc(min(90vw, 90vh) * -0.0035);
+      background: #f00;
+    }
+  </style>
+</head>
+<body>
+  <div class="clock">
+    <div class="hour-marks"></div>
+    <div class="hand hour"></div>
+    <div class="hand minute"></div>
+    <div class="hand second"></div>
+    <div class="center"></div>
+  </div>
+
+  <script>
+    // Create hour marks
+    const hourMarks = document.querySelector('.hour-marks');
+    for (let i = 0; i < 12; i++) {
+      const mark = document.createElement('div');
+      mark.style.transform = `rotate(${i * 30}deg)`;
+      hourMarks.appendChild(mark);
+    }
+
+    // Get hands
+    const hourHand = document.querySelector('.hour');
+    const minuteHand = document.querySelector('.minute');
+    const secondHand = document.querySelector('.second');
+
+    function updateClock() {
+      const now = new Date();
+      
+      const seconds = now.getSeconds();
+      const secondsDegrees = ((seconds / 60) * 360);
+      
+      const minutes = now.getMinutes();
+      const minutesDegrees = ((minutes / 60) * 360) + ((seconds/60)*6);
+      
+      const hours = now.getHours();
+      const hoursDegrees = ((hours / 12) * 360) + ((minutes/60)*30);
+
+      hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+      minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+    }
+
+    // Update clock every second
+    setInterval(updateClock, 1000);
+    updateClock(); // Initial update
+  </script>
+</body>
+</html>
